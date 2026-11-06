@@ -10,39 +10,30 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HorrorMovieStorage implements MovieStorage<HorrorMovie>{
+public class HorrorMovieStorage implements MovieStorage<HorrorMovie> {
 
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
     private Path horrorMovieFilePath;
 
-    public HorrorMovieStorage(Path filePath){
+    public HorrorMovieStorage(Path filePath) {
         this.horrorMovieFilePath = filePath;
     }
 
     @Override
-    public void save(HorrorMovie movie) throws IOException {
-        //anropa findById(). Finns id redan, gör ingenting.
-        // Annars: anropa findAll(), lägg till filmen i listan och skriv hela listan till fil.
-        // Vid första anropet skapas filen
-
-        HorrorMovie horrorMovie = findById(movie.getId());
-
-        if (horrorMovie == null){
-            //anropa findAll(), lägg till filmen i listan och skriv hela listan till fil.
-            // Vid första anropet skapas filen
-            List<HorrorMovie> horrorList = findAll();
-            horrorList.add(movie);
-            //skriv till fil
-
+    public List<HorrorMovie> findAll() throws IOException {
+        if (Files.exists(horrorMovieFilePath) && Files.size(horrorMovieFilePath) > 0) {
+            return objectMapper.readValue(horrorMovieFilePath.toFile(),
+                    new TypeReference<>() {
+                    });
         } else {
-            //gör ingenting
+            return new ArrayList<>(); //new array list istället för path of säkrare?
         }
     }
 
     @Override
-    public HorrorMovie findById(int id) throws IOException { //anropa findAll() - om id:t saknas, returnera null
+    public HorrorMovie findById(int id) throws IOException {
         List<HorrorMovie> horrorList = findAll();
-        for (HorrorMovie horrorMovie : horrorList){
+        for (HorrorMovie horrorMovie : horrorList) {
             if (horrorMovie.getId() == id) {
                 return horrorMovie;
             }
@@ -51,14 +42,15 @@ public class HorrorMovieStorage implements MovieStorage<HorrorMovie>{
     }
 
     @Override
-    public List<HorrorMovie> findAll() throws IOException { //läs listan; saknas filen, returnera en tom lista
-        List<HorrorMovie> horrorList;
-        if (Files.exists(horrorMovieFilePath)) {
-            horrorList = mapper.readValue(horrorMovieFilePath.toFile(),
-                    new TypeReference<List<HorrorMovie>>() {});
-            return horrorList;
+    public void save(HorrorMovie movie) throws IOException {
+        HorrorMovie horrorMovie = findById(movie.getId());
+        if (horrorMovie == null) {
+            List<HorrorMovie> horrorList = findAll();
+            horrorList.add(movie);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(horrorMovieFilePath.toFile(), horrorList);
+            IO.println("Skrev till fil " + horrorList);
         } else {
-            return List.of();
+            IO.println("Filmen finns redan i biblioteket.");
         }
     }
 }
