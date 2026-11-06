@@ -9,7 +9,6 @@ public interface MovieStorage<T> {
 
     void save(T movie) throws IOException;
 
-    void save(DramaMovie movie) throws IOException;
 
     T findById(int id) throws IOException;
 
