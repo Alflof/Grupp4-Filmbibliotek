@@ -32,7 +32,7 @@ class DramaMovieStorageTest {
             assertEquals(1, dramaMovie.getId());
             assertEquals("test", dramaMovie.getTitle());
         } catch (IOException e) {
-            IO.println(e.getMessage());
+            fail("Här ska vi inte va" + e.getMessage());
         }
 
 
@@ -49,7 +49,7 @@ class DramaMovieStorageTest {
             assertEquals(1, dramaMovies.size());
             assertEquals("test1", dramaMovies.get(0).getTitle());
         } catch (IOException e) {
-            IO.println(e.getMessage());
+            fail("Här ska vi inte va" + e.getMessage());
         }
 
     }
@@ -60,7 +60,8 @@ class DramaMovieStorageTest {
             List<DramaMovie> dramaMovies = dramaMovieStorage.findAll();
             assertTrue(dramaMovies.isEmpty());
         } catch (IOException e) {
-            IO.println(e.getMessage());
+            fail("Här ska vi inte va" + e.getMessage());
+
         }
 
     }
@@ -73,7 +74,7 @@ class DramaMovieStorageTest {
             assertNull(dramaMovieStorage.findById(2));
 
         } catch (IOException e) {
-            IO.println(e.getMessage());
+            fail("Här ska vi inte va" + e.getMessage());
         }
 
     }
