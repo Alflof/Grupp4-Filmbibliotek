@@ -27,7 +27,8 @@ public class DramaMovieStorage implements MovieStorage<DramaMovie> {
         }
         List<DramaMovie> dramaMovies = findAll();
         dramaMovies.add(movie);
-        mapper.writeValue(filePath.toFile(), dramaMovies);
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(filePath.toFile(), dramaMovies);
     }
 
     @Override
