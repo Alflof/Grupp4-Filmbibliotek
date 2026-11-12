@@ -15,7 +15,7 @@ public class ComedyMovieStorage implements MovieStorage<ComedyMovie> {
     private Path file;
     private ObjectMapper mapper = new ObjectMapper();
 
-    public ComedyMovieStorage(Path file){
+    public ComedyMovieStorage(Path file) {
         this.file = file;
     }
 
@@ -24,7 +24,8 @@ public class ComedyMovieStorage implements MovieStorage<ComedyMovie> {
         if (!Files.exists(file) || Files.size(file) == 0) {
             return new ArrayList<>();
         }
-        return mapper.readValue(file.toFile(), new TypeReference<List<ComedyMovie>>() {});
+        return mapper.readValue(file.toFile(), new TypeReference<>() {
+        });
     }
 
     @Override
@@ -39,7 +40,7 @@ public class ComedyMovieStorage implements MovieStorage<ComedyMovie> {
 
     @Override
     public void save(ComedyMovie movie) throws IOException {
-        if (findById(movie.getId()) != null){
+        if (findById(movie.getId()) != null) {
             return;
         }
         List<ComedyMovie> movies = findAll();

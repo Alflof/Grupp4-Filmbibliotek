@@ -26,7 +26,7 @@ public class HorrorMovieStorage implements MovieStorage<HorrorMovie> {
                     new TypeReference<>() {
                     });
         } else {
-            return new ArrayList<>(); //new array list istället för path of säkrare?
+            return new ArrayList<>();
         }
     }
 
@@ -48,9 +48,6 @@ public class HorrorMovieStorage implements MovieStorage<HorrorMovie> {
             List<HorrorMovie> horrorList = findAll();
             horrorList.add(movie);
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(horrorMovieFilePath.toFile(), horrorList);
-            IO.println("Skrev till fil " + horrorList);
-        } else {
-            IO.println("Filmen finns redan i biblioteket.");
         }
     }
 }
