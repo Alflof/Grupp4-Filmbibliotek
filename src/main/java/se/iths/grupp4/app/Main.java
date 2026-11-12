@@ -3,6 +3,7 @@ package se.iths.grupp4.app;
 import se.iths.grupp4.app.model.ComedyMovie;
 import se.iths.grupp4.app.model.DramaMovie;
 import se.iths.grupp4.app.model.HorrorMovie;
+import se.iths.grupp4.app.model.Movie;
 import se.iths.grupp4.app.storage.ComedyMovieStorage;
 import se.iths.grupp4.app.storage.DramaMovieStorage;
 import se.iths.grupp4.app.storage.HorrorMovieStorage;
@@ -10,6 +11,7 @@ import se.iths.grupp4.app.storage.MovieStorage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -69,7 +71,72 @@ public class Main {
             } catch (IOException e) {
                 IO.println("Fel: " + e.getMessage());
             }
+
+        }
+        boolean keepRunning = true;
+        while (keepRunning) {
+
+            String choice = IO.readln("\n1.Visa filmer i en viss kategori\n" +
+                    "2.Visa alla filmer\n" + "3.Avsluta\n" + "Välj ett alternativ: ");
+            String categoryChoice;
+
+            switch (choice) {
+                case "1" -> {
+                    categoryChoice = IO.readln("\n1.Skräck\n2.Drama\n3.Komedi\nVälj en kategori: ");
+                    printCategory(categoryChoice);
+                }
+                case "2" -> printAll();
+                case "3" -> keepRunning = false;
+                default -> IO.println("Ogiltigt val, försök igen");
+            }
         }
 
+    }
+
+    static void printCategory(String categoryChoice) {
+        try {
+            if (categoryChoice.equals("1")) {
+                List<HorrorMovie> allMovies = horrorStorage.findAll();
+                for (Movie movie : allMovies) {
+                    IO.println(movie.getId() + ". " + movie.getTitle() + " - " + movie.category());
+                }
+            }
+            if (categoryChoice.equals("2")) {
+                List<DramaMovie> allMovies = dramaStorage.findAll();
+                for (Movie movie : allMovies) {
+                    IO.println(movie.getId() + ". " + movie.getTitle() + " - " + movie.category());
+                }
+            }
+            if (categoryChoice.equals("3")) {
+                List<ComedyMovie> allMovies = comedyStorage.findAll();
+                for (Movie movie : allMovies) {
+                    IO.println(movie.getId() + ". " + movie.getTitle() + " - " + movie.category());
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    static void printAll() {
+        List<Movie> allMovies = new ArrayList<>();
+        try {
+            for (Movie movie : horrorStorage.findAll()) {
+                allMovies.add(movie);
+            }
+            for (Movie movie : dramaStorage.findAll()) {
+                allMovies.add(movie);
+            }
+            for (Movie movie : comedyStorage.findAll()) {
+                allMovies.add(movie);
+            }
+            for (Movie movie : allMovies) {
+                IO.println(movie.getId() + ". " + movie.getTitle() + " - " + movie.category());
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

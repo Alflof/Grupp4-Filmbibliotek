@@ -3,7 +3,6 @@ package se.iths.grupp4.app.storage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.iths.grupp4.app.model.DramaMovie;
-import se.iths.grupp4.app.model.Movie;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,7 +46,7 @@ public class DramaMovieStorage implements MovieStorage<DramaMovie> {
         if (!Files.exists(filePath)) {
             return new ArrayList<>();
         }
-        return mapper.readValue(filePath.toFile(), new TypeReference<List<DramaMovie>>() {
+        return mapper.readValue(filePath.toFile(), new TypeReference<>() {
         });
     }
 }
